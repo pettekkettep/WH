@@ -1,0 +1,385 @@
+@font-face {
+    font-family: Planewalker-b;
+    font-weight: bold;
+    font-style: none;
+    src: url('../fonts/Planewalker Bold.otf');
+}
+
+@font-face {
+    font-family: Planewalker;
+    font-weight: normal;
+    font-style: none;
+    src: url('../fonts/Planewalker.otf');
+}
+
+@font-face {
+    font-family: Planewalker-bi;
+    font-weight: bold;
+    font-style: italic;
+    src: url('../fonts/Planewalker Bold Italic.otf');
+}
+
+@font-face {
+    font-family: Planewalker-i;
+    font-weight: normal;
+    font-style: italic;
+    src: url('../fonts/Planewalker Italic.otf');
+}
+
+@font-face {
+    font-family: Scoreboard;
+    font-weight: normal;
+    font-style: none;
+    src: url('../fonts/SCOREBOARD.ttf');
+}
+
+@font-face {
+    font-family: lcd;
+    font-weight: normal;
+    font-style: none;
+    src: url('../fonts/LCD-N___.TTF');
+}
+
+html {
+    background: url("../theme/HogwartsFounders/gfx/tlo.png") no-repeat center center fixed #000;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    font-family: Gudea, Verdana, sans-serif;
+    font-size: 14px;
+    color: white;
+}
+
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    border: none;
+    width: 100%;
+}
+
+.col-m-0 {
+    display: none;
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+.logo {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    margin: auto;
+}
+
+div > img {
+    width: auto;
+    height: auto;
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+.row-style {
+    background-color: rgba(21, 12, 15, 0.9);
+    border-radius: 15px;
+    border-collapse: collapse;
+    border: 1px solid gray;
+}
+
+.row-style-light {
+    background-color: rgba(21, 12, 15, 0.6);
+    border-radius: 15px;
+    border-collapse: collapse;
+    border: 1px solid gray;
+}
+
+@media only screen and (min-width: 500px) {
+    .logo {width: 75%;}
+    .col-m-1{ width: 8.33%; }
+    .col-m-2{ width: 16.66%; }
+    .col-m-3{ width: 25%; }
+    .col-m-4{ width: 33.33%; }
+    .col-m-5{ width: 41.66%; }
+    .col-m-6{ width: 50%; }
+    .col-m-7{ width: 58.33%; }
+    .col-m-8{ width: 66.66%; }
+    .col-m-9{ width: 75%; }
+    .col-m-10{ width: 83.33%; }
+    .col-m-11{ width: 91.66%; }
+    .col-m-12{ width: 100%; }
+}
+
+
+@media only screen and (min-width: 900px) {
+    .logo {width: 50%;}
+    .col-1{ width: 8.33%; }
+    .col-2{ width: 16.66%; }
+    .col-3{ width: 25%; }
+    .col-4{ width: 33.33%; }
+    .col-5{ width: 41.66%; }
+    .col-6{ width: 50%; }
+    .col-7{ width: 58.33%; }
+    .col-8{ width: 66.66%; }
+    .col-9{ width: 75%; }
+    .col-10{ width: 83.33%; }
+    .col-11{ width: 91.66%; }
+    .col-12{ width: 100%; }
+    .col-m-0 {
+        display: block;
+        background-color: rgba(0,0,0,0);
+    }
+}
+
+ul {
+    padding-left: 0;
+}
+
+li.latest {
+    list-style-type: none;
+}
+
+li.latest a {
+    color: powderblue;
+    text-decoration: none;
+}
+
+li.latest a:hover{
+    color: white;
+    text-decoration: underline;
+}
+
+li.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 3px;
+
+}
+
+li.menu a{
+    display: block;
+    color: white;
+    text-decoration: none;
+    border-left: 3px lightblue solid;
+    padding-left: 7px;
+    padding-bottom: 2px;
+    margin: 0;
+}
+
+li.menu a:hover{
+    display: block;
+    background-color: rgba(21, 12, 15,0.2);
+    border-left: 3px white solid;
+    border-bottom: 1px white solid;
+    padding-bottom: 1px;
+    padding-left: 10px;
+}
+
+li.menu-imp a{
+    display: block;
+    color: white;
+    text-decoration: none;
+    border-left: 5px yellow solid;
+    padding-left: 5px;
+    padding-bottom: 2px;
+    margin: 0;
+}
+
+li.menu-imp a:hover{
+    display: block;
+    background-color: rgba(21, 12, 15,0.2);
+    border-left: 5px white solid;
+    border-bottom: 1px white solid;
+    padding-bottom: 1px;
+    padding-left: 8px;
+}
+
+.house {
+    font-family: Planewalker, "Times New Roman", serif;
+    font-size: 175%;
+}
+
+.score {
+    font-family: Scoreboard, Arial, sans-serif;
+    font-size: 200%;
+}
+
+table.pts{
+    margin: auto;
+}
+
+.img-logo{
+    text-align: center;
+}
+
+.gryff {color: #f00;}
+.huff {color: #fc0;}
+.rav {color: #06f;}
+.slyth {color: #0c0;}
+
+.news-bar{
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background: rgba(21, 12, 15, 0.7); /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)); /* Standard syntax */
+}
+
+li.news{
+    display: inline;
+    padding: 0 100px 15px 0;
+}
+
+#logo-wh {
+    width: 120px;
+    height: auto;
+}
+
+.row-in {
+    padding: 20px 0;
+    border-bottom: 1px solid teal;
+}
+
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+.pagination>li {
+    display: inline;
+}
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #fff;
+    text-decoration: none;
+    background-color: #112;
+    border: 1px solid #223;
+}
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.pagination>li:last-child>a, .pagination>li:last-child>span {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+.pagination>li>a:focus, .pagination>li>a:hover, .pagination>li>span:focus, .pagination>li>span:hover {
+    z-index: 2;
+    color: #dde;
+    background-color: #335;
+    border-color: #334;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+.pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+    color: #777;
+    cursor: not-allowed;
+    background-color: #333;
+    border-color: #333;
+}
+.pagination-lg>li>a, .pagination-lg>li>span {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
+}
+.pagination-lg>li:first-child>a, .pagination-lg>li:first-child>span {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+.pagination-lg>li:last-child>a, .pagination-lg>li:last-child>span {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+.pagination-sm>li>a, .pagination-sm>li>span {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.pagination-sm>li:first-child>a, .pagination-sm>li:first-child>span {
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.pagination-sm>li:last-child>a, .pagination-sm>li:last-child>span {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.paginator{
+    display: inline-block;
+    margin: auto;
+}
+
+#row-center{
+    text-align: center;
+}
+
+.row-news{
+    background-color: rgba(21, 12, 15, 0.2);
+    border-collapse: collapse;
+    border-bottom: 2px solid white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: justify;
+}
+
+.news-avatar{
+    display: block;
+    margin: auto;
+}
+
+.house-att {
+    font-family: lcd, Arial, sans-serif;
+    font-size: 150%;
+}
+
+td.house-att {
+    text-align: center;
+}
+
+
+li.pupils {
+    list-style-type: none;
+    margin: 0;
+    padding: 3px;
+
+}
+
+li.pupils a{
+    display: inline;
+    text-decoration: none;
+    padding-left: 7px;
+    padding-bottom: 8px;
+    padding-top: 2px;
+    margin: 0;
+    font-size: 150%;
+}
+
+li.pupils a:hover{
+    color: lightgrey;
+}
