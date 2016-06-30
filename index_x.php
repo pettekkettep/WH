@@ -1,8 +1,20 @@
 <?php
+
+session_start();
+
+if($_GET['logout'] == 1){
+    unset($_SESSION['username']);
+    unset($_SESSION['password']);
+}
+
 require_once("./functions_x.php");
 if(!isset($_GET['p'])){
     $_GET['p'] = 1;
 }
+
+print_admin_toolbox();
+
+
 
 ?>
 
@@ -11,12 +23,12 @@ if(!isset($_GET['p'])){
     <title>Wirtualny Hogwart</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href='http://fonts.googleapis.com/css?family=Gudea&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
 <div class="row">
-    <div class="logo"><img src = "theme/HogwartsFounders/gfx/logo.png"></div>
+    <a href="http://wh.boo.pl"><div class="logo"><img src = "theme/HogwartsFounders/gfx/logo.png"></div></a>
 </div>
 <div class="row">
     <div class="logo"><img src = "theme/HogwartsFounders/gfx/wh1.png"></div>
@@ -72,11 +84,22 @@ if(!isset($_GET['p'])){
         <div class="row-in">
             <? print_castle() ?>
         </div>
+        <div class="row-in">
+            <? print_dorm() ?>
+        </div>
+        <div class="row-in">
+            <? print_houses_details() ?>
+        </div>
+        <div class="row-in">
+            <? print_kleks() ?>
+        </div>
     </div>
 
 
     <div class="col-1 col-m-0"></div>
 </div>
+
+
 
 </body>
 </html>

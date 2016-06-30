@@ -51,6 +51,12 @@ function db_statement(){
                     array_push($result, array("imie" => $imie, "nazwisko" => $nazwisko, "nick" => $nick, "dom" => $dom, "mail" => $mail, "klasa" => $klasa));
                 }
             }
+            if($option == 'login') {
+                $stmt->bind_result($id);
+                while ($stmt->fetch()) {
+                    array_push($result, array("id" => $id));
+                }
+            }
             return $result;
         }
         mysqli_stmt_close($stmt);
@@ -665,6 +671,124 @@ function print_castle(){
                 </li>
             </ul>";
 }
+
+function print_dorm(){
+    echo "<div align='center'>
+            <a href='http://wh.boo.pl/dormitorium.php'>
+                <img src='http://wh.boo.pl/obrazki/dormitoria.gif' alt='Wejdź do szkolnego pubu!'>
+            </a>
+         </div>";
+}
+
+function print_houses_details(){
+    echo "<div align='center'>
+             <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/domy.png'>
+         </div>
+         <p class='gryff house-info'> GRYFFINDOR </p>
+         <p class='narrow'>Opiekun: <span class='gryff'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='gryff'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='gryff'>Martin McCarthy </span></p>
+         
+         <p class='huff house-info'> HUFFLEPUFF </p>
+         <p class='narrow'>Opiekun: <span class='huff'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='huff'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='huff'>Martin McCarthy </span></p>
+         
+         <p class='rav house-info'> RAVENCLAW </p>
+         <p class='narrow'>Opiekun: <span class='rav'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='rav'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='rav'>Martin McCarthy </span></p>
+         
+         <p class='slyth house-info'> SLYTHERIN </p>
+         <p class='narrow'>Opiekun: <span class='slyth'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='slyth'>Martin McCarthy </span></p>
+         <p class='narrow'>Prefekt: <span class='slyth'>Martin McCarthy </span></p>
+         
+         <div align='center'><br>
+         <p class='narrow'>Prefekt naczelny:</p>
+         <p class='narrow'>Martin McCarthy</p><br>
+         <p class='narrow'>Prefekt naczelny:</p>
+         <p class='narrow'>Martin McCarthy</p></div>";
+
+
+}
+
+function print_kleks(){
+    echo "<div align='center'>
+             <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/kleks.png'>
+             <p>Najnowszy numer kleksa już 27 czerwca!</p>
+          </div>
+             <p class='narrow'>Red. naczelny: A. Sloan</p>
+             <p class='narrow'>Sowa: redakcja.kleks@gmail.com</p>
+             <p class='narrow'>Nabór: OTWARTY</p>
+         
+         <ul>
+                <li class='menu menu-imp'>
+                    <a href='http://www.wh.boo.pl/kleks/kleks115.pdf'>
+                        Najnowszy numer
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=84'>
+                        \"Kleks\"
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=29'>
+                        Kalendarium \"Kleksa\"
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=85'>
+                        Redakcja
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=86'>
+                        Działy
+                    </a>
+                </li>
+         </ul>";
+}
+
+function users_is_admin($login, $password){
+    $sql = "SELECT id FROM admins WHERE nick = ? AND pass = ?";
+    $result = db_statement($sql, 'ss', array(&$login, &$password), 'login');
+    if(sizeof($result) == 1){
+        return true;
+    }
+    else return false;
+}
+
+function users_is_root($login, $password){
+    $sql = "SELECT access FROM admins WHERE nick = ? AND pass = ?";
+    $result = db_statement($sql, 'ss', array(&$login, &$password), 'login');
+    if(sizeof($result) == 1){
+        if($result['access'] = 'root') return true;
+        else return false;
+    }
+    else return false;
+}
+
+function print_admin_toolbox(){
+    if(users_is_admin($_SESSION['username'], $_SESSION['password'])) {
+        echo "<div id='top'> Zalogowano jako: " . $_SESSION['username'] . " <span class='logout'><a href='?logout=1'>(wyloguj)</a></span><br>";
+        echo "<span class='admin'><a href='#'>/a/Dodaj ważną datę </a></span>";
+    }
+    if(users_is_root($_SESSION['username'], $_SESSION['password'])) {
+        echo "<span class='root'><a href='#'>/s/Zatwierdź ważną datę</a></span>";
+    }
+    echo "</div>";
+}
+
+function dates_add_date($author, $content_1, $content_2, $expiry, $priority, $hyperlink){
+
+    $sql = "INSERT INTO dates (author, content_1, content_2, expiry_date, priority, hyperlink) VALUES (?, ?, ?, ?, ?, ?)";
+    $processed = db_statement($sql, 'ssssis', array(&$author, &$content_1, &$content_2, &$expiry, &$priority, &$hyperlink));
+    return (!$processed);
+
+}
+
 
 ?>
 
