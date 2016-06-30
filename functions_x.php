@@ -3,7 +3,7 @@
 function db_statement(){
 
     #dbConnection
-    include('db.config.php');
+    include('db_config.php');
 
     $dbConnection = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
     mysqli_query($dbConnection, 'SET NAMES utf8');
@@ -21,6 +21,7 @@ function db_statement(){
         $sql = $args[0];
         $types = $args[1];
         $params = $args[2];
+        $option = $args[3];
         $stmt = mysqli_prepare($dbConnection,$sql);
         if ($stmt === false) {
             trigger_error('Statement failed! ' . htmlspecialchars(mysqli_error($dbConnection)), E_USER_ERROR);
@@ -38,9 +39,17 @@ function db_statement(){
             return false;
         } else {
             $result = array();
-            $stmt -> bind_result($id, $title, $author, $date);
-            while ($stmt->fetch()) {
-                array_push($result, array("id" => $id, "title" => $title, "author" => $author, "date" => $date));
+            if($option == 'news_feed') {
+                $stmt->bind_result($id, $title, $author, $date);
+                while ($stmt->fetch()) {
+                    array_push($result, array("id" => $id, "title" => $title, "author" => $author, "date" => $date));
+                }
+            }
+            if($option == 'pupil_list') {
+                $stmt->bind_result($imie, $nazwisko, $nick, $mail, $dom, $klasa);
+                while ($stmt->fetch()) {
+                    array_push($result, array("imie" => $imie, "nazwisko" => $nazwisko, "nick" => $nick, "dom" => $dom, "mail" => $mail, "klasa" => $klasa));
+                }
             }
             return $result;
         }
@@ -53,7 +62,7 @@ function db_statement(){
 function print_last_news($amount_to_show = 5){
 
     $sql = "SELECT id, title, author, date FROM news ORDER BY date DESC LIMIT ?";
-    $result = db_statement($sql, "i", array(&$amount_to_show));
+    $result = db_statement($sql, "i", array(&$amount_to_show), 'news_feed');
 
 //        echo "<ul>";
 //        while ($row = mysqli_fetch_assoc($result)) {
@@ -423,10 +432,95 @@ function print_enroll_menu(){
             </ul>";
 }
 
+function print_pupil_search(){
+    echo "Wyszukaj ucznia:
+        <form action='/uczen.php' method='post'>
+             <input type='text' name='name' placeholder='Imię/nazwisko/mail/nick' required>
+             <span>
+                 <button>>></button>
+             </span>
+        </form>";
+}
+
+function print_pupil_search_result($query){
+
+    $query = "%" . $query . "%";
+    $sql = "SELECT imie, nazwisko, nick, mail, dom, klasa FROM zapisy_u 
+            WHERE (imie LIKE ? OR nazwisko LIKE ? OR nick LIKE ? OR mail LIKE ?) 
+            ORDER BY dom";
+
+    $result = db_statement($sql, "ssss", array(&$query, &$query, &$query, &$query), 'pupil_list');
+    $rows = sizeof($result);
+    if($query == NULL)
+    {
+        echo "Wprowadź zapytanie";
+        exit;
+    }
+    if($rows == 0){
+        echo "Brak uczniów o zadanych kryteriach";
+    }
+    elseif ($rows > 50){
+        echo "Ponad 50 uczniów spełniających zadane kryteria. Więcej konkretów!";
+    }
+    else {
+        echo "<table width=100%><tr><th width=75%>Imię i nazwisko (mail)</th><th width=20%>Nick</th><th width='5%'>Klasa</th></tr>";
+        foreach ($result as $row){
+            print_pupil($row);
+        }
+        echo "</table>";
+    }
+
+}
+
+function print_pupil($row){
+    switch($row['dom']) {
+        case '#ff0000':
+            $dom = 'gryff';
+            break;
+        case '#ffcc00':
+            $dom = 'huff';
+            break;
+        case '0066ff':
+            $dom = 'rav';
+            break;
+        case '00cc00':
+            $dom = 'slyth';
+            break;
+    }
+    echo "<tr>
+        <td class='$dom'>$row[imie] $row[nazwisko] ($row[mail])</td>
+        <td class='$dom'>$row[nick]</td>
+        <td class='$dom'>$row[klasa]</td>
+    </tr>";
+}
+
 function print_day($class, $day){
     switch($class) {
         case 'I':
-            $db 
+            $db = 'plan_lekcji';
+            echo "<div align='center'>
+            <img src='http://wh.boo.pl/hogwartsfounders/klasa1.png'>
+            </div>";
+            break;
+        case 'II':
+            $db = 'plan_lekcji2';
+            echo "<div align='center'>
+            <img src='http://wh.boo.pl/hogwartsfounders/klasa2.png'>
+            </div>";
+            break;
+        default:
+            $db = 'plan_lekcji3';
+            echo "<div align='center'>
+            <img src='http://wh.boo.pl/hogwartsfounders/klasa3.png'>
+            </div>";
+            break;
+    }
+
+    $sql = "SELECT godzina, przedmiot, miejsce FROM $db
+              WHERE dzien = $day ORDER BY godzina";
+    $result = db_statement($sql);
+    while ($row = mysqli_fetch_assoc($result)){
+        echo $row['godzina'] . $row['przedmiot'] . $row['miejsce'] . "<br>";
     }
 }
 
@@ -456,6 +550,120 @@ function print_time_table(){
     print_day('I', $day);
     print_day('II', $day);
     print_day('III', $day);
+}
+
+function print_important_dates(){
+    echo "<div align='center'>
+            <img src='http://www.wh.boo.pl/hogwartsfounders/waznedaty.png'>
+            </div>
+            <ul>
+                <li class='date imp-date'>
+                    25.06 - 30.06 - sesja egzaminacyjna
+                </li>
+                <li class='date'>
+                    do 01.07 - wystawianie ocen końcowych klasie I i II
+                </li>
+                <li class='date'>
+                    do 07.07 - wysyłanie konkursu Kleksa
+                </li>
+             
+            </ul>";
+}
+
+function print_pub_czaro(){
+    echo "<div align='center'>
+            <a href='http://chatownik.pl/czat.php?pokoj=pub_czarownica'>
+                <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/czaro.png' alt='Wejdź do szkolnego pubu!'>
+            </a>
+         </div>";
+}
+
+function print_castle(){
+    echo "<div align='center'>
+             <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/zamek.png'>
+         </div>
+         <ul>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=1'>
+                        Regulamin szkoły
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=2'>
+                        System oceniania
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=3'>
+                        Oferta edukacyjna
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=4'>
+                        Szkolny hymn
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=5'>
+                        Programy nauczania
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=24'>
+                        Punktowanie uczniów
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=23'>
+                        Punktowanie nauczycieli
+                    </a>
+                </li>
+                <li class='menu menu-imp'>
+                    <a href='http://wh.boo.pl/dzienniki.php'>
+                        <b>DZIENNIKI</b>
+                    </a>
+                </li>
+                <li class='menu menu-imp'>
+                    <a href='http://wh.boo.pl/oceny.php'>
+                        <b>OCENY</b>
+                    </a>
+                </li>
+                <li class='menu menu-imp'>
+                    <a href='http://wh.boo.pl/infopage.php?id=6'>
+                        <b>OLIMPIADY</b>
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=108'>
+                        Ranking Olimpiad
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=117'>
+                        Ranking Konkursów
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=25'>
+                        Ranking nauczycieli
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=118'>
+                        Złote Feniksy
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=7'>
+                        Współpraca
+                    </a>
+                </li>
+                <li class='menu'>
+                    <a href='http://wh.boo.pl/infopage.php?id=112'>
+                        Współpraca - Facebook
+                    </a>
+                </li>
+            </ul>";
 }
 
 ?>
