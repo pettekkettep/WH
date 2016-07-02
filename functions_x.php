@@ -57,6 +57,18 @@ function db_statement(){
                     array_push($result, array("id" => $id));
                 }
             }
+            if($option == 'login_root') {
+                $stmt->bind_result($access);
+                while ($stmt->fetch()) {
+                    array_push($result, array("access" => $access));
+                }
+            }
+            if($option == 'edit_date') {
+                $stmt->bind_result($content_1, $content_2, $expiry_date, $hyperlink);
+                while ($stmt->fetch()) {
+                    array_push($result, array("content_1" => $content_1, "content_2" => $content_2, "expiry_date" => $expiry_date, "hyperlink" => $hyperlink));
+                }
+            }
             return $result;
         }
         mysqli_stmt_close($stmt);
@@ -559,21 +571,27 @@ function print_time_table(){
 }
 
 function print_important_dates(){
+
+    $sql = "SELECT content_1, content_2, priority, hyperlink FROM dates WHERE TIMESTAMP(expiry_date) > CURRENT_TIMESTAMP() AND approved = 1 ORDER BY expiry_date";
+    $result = db_statement($sql);
+
     echo "<div align='center'>
             <img src='http://www.wh.boo.pl/hogwartsfounders/waznedaty.png'>
             </div>
-            <ul>
-                <li class='date imp-date'>
-                    25.06 - 30.06 - sesja egzaminacyjna
-                </li>
-                <li class='date'>
-                    do 01.07 - wystawianie ocen końcowych klasie I i II
-                </li>
-                <li class='date'>
-                    do 07.07 - wysyłanie konkursu Kleksa
-                </li>
-             
-            </ul>";
+            <ul>";
+
+    while ($row = mysqli_fetch_assoc($result)) {
+        echo "<li class='";
+        if ($row['priority'] == 1) echo "date imp-date";
+        else echo "date";
+        echo "'>";
+        if ($row['hyperlink'] != NULL) echo "<a href='" . $row['hyperlink'] . "'>";
+        echo "<strong>" . $row['content_1'] . "</strong>";
+        echo " - " . $row['content_2'];
+        if ($row['hyperlink'] != NULL) echo " [KLIK!] </a>";
+        echo "</li>";
+    }
+    echo "</ul>";
 }
 
 function print_pub_czaro(){
@@ -761,10 +779,16 @@ function users_is_admin($login, $password){
 }
 
 function users_is_root($login, $password){
-    $sql = "SELECT access FROM admins WHERE nick = ? AND pass = ?";
-    $result = db_statement($sql, 'ss', array(&$login, &$password), 'login');
+    $login = "'" . $login . "'";
+    $password = "'" . $password . "'";
+    $sql = "SELECT access FROM admins WHERE nick = $login AND pass = $password";/////////////NIE PODOBA MI SIĘ TO
+    $result = db_statement($sql);
+    if(sizeof($result) == 0){
+        die("NIGDY NIE ZNAJDĘ TEGO BłĘDU POZDRO");
+    }
     if(sizeof($result) == 1){
-        if($result['access'] = 'root') return true;
+        $result = mysqli_fetch_assoc($result);
+        if($result['access'] == 'root') return true;
         else return false;
     }
     else return false;
@@ -773,10 +797,10 @@ function users_is_root($login, $password){
 function print_admin_toolbox(){
     if(users_is_admin($_SESSION['username'], $_SESSION['password'])) {
         echo "<div id='top'> Zalogowano jako: " . $_SESSION['username'] . " <span class='logout'><a href='?logout=1'>(wyloguj)</a></span><br>";
-        echo "<span class='admin'><a href='#'>/a/Dodaj ważną datę </a></span>";
+        echo "<span class='admin'><a href='/panel_add_date.php'>/a/Dodaj ważną datę </a></span>";
     }
     if(users_is_root($_SESSION['username'], $_SESSION['password'])) {
-        echo "<span class='root'><a href='#'>/s/Zatwierdź ważną datę</a></span>";
+        echo "<span class='root'><a href='/panel_manage_dates.php'>/s/Zatwierdź ważną datę</a></span>";
     }
     echo "</div>";
 }
@@ -787,6 +811,88 @@ function dates_add_date($author, $content_1, $content_2, $expiry, $priority, $hy
     $processed = db_statement($sql, 'ssssis', array(&$author, &$content_1, &$content_2, &$expiry, &$priority, &$hyperlink));
     return (!$processed);
 
+}
+
+function dates_edit_date($author, $content_1, $content_2, $expiry, $priority, $hyperlink, $id){
+
+    $sql = "UPDATE dates SET author = ?, content_1 = ?, content_2 = ?, expiry_date = ?, priority = ?, hyperlink = ? WHERE id = ?";
+    $processed = db_statement($sql, 'ssssisi', array(&$author, &$content_1, &$content_2, &$expiry, &$priority, &$hyperlink, &$id));
+    return (!$processed);
+
+}
+
+function print_date_status($date, $approved){
+    if(time() > strtotime($date)) {
+        echo "przeterminowana";
+    }
+    else {
+        if($approved == 0){
+            echo "w poczekalni";
+        } else {
+            echo "<span class='emphasize'>NA WIDOKU</span>";
+        }
+    }
+}
+
+function print_show_date($approved, $id){
+    if($approved == 0){
+        echo "<a href='/panel_manage_dates.php?action=show&id=" . $id . "'>[POKAŻ]</a>";
+    }
+}
+
+function print_hide_date($approved, $id){
+    if($approved == 1){
+        echo "<a href='/panel_manage_dates.php?action=hide&id=" . $id . "'>[UKRYJ]</a>";
+    }
+}
+
+function print_date($row){
+    echo "<tr>";
+    echo "<td>" . $row['author'] . "  (" . $row['created'] . ")" . "</td>";
+    echo "<td>" . $row['content_1'] . " - " . $row['content_2'] . "</td>";
+    echo "<td>" . $row['expiry_date'] . "</td>";
+    echo "<td>"; print_date_status($row['expiry_date'], $row['approved']); echo "</td>";
+    echo "<td>" . $row['hyperlink'] . "</td>";
+    echo "<td class='td-center'>"; print_show_date($row['approved'], $row['id']); echo "</td>";
+    echo "<td class='td-center'>"; print_hide_date($row['approved'], $row['id']); echo "</td>";
+    echo "<td class='td-center'>" . "<a href='/panel_add_date.php?action=edit&id=" . $row['id']  . "'>[EDYTUJ]</a>" . "</td>";
+    echo "<td class='td-center'>" . "<a href='/panel_manage_dates.php?action=delete&id=" . $row['id']  . "'>[USUŃ]</a>". "</td>";
+    echo "</tr>";
+}
+
+function print_dates_to_manage(){
+
+    $sql = "SELECT * FROM dates ORDER BY expiry_date DESC";
+    $result = db_statement($sql);
+
+    if(mysqli_num_rows($result) == 0) {
+        echo "Trochę to dziwne, ale w bazie nie ma żadnych ważnych dat.";
+    }
+    else {
+        echo "<table class='generic-table'><tr><th>Autor (dodano)</th><th>Treść</th><th>Data ważności</th><th>Link</th><th>Obecny status</th><th>POKAŻ</th><th>UKRYJ</th><th>EDYTUJ</th><th>USUŃ</th>";
+        while ($row = mysqli_fetch_assoc($result)) {
+            print_date($row);
+        }
+        echo "</table>";
+    }
+}
+
+function date_show($id){
+    $sql = "UPDATE dates SET approved = 1 WHERE id = ?";
+    $processed = db_statement($sql, 'i', array(&$id));
+    return !$processed;
+}
+
+function date_hide($id){
+    $sql = "UPDATE dates SET approved = 0 WHERE id = ?";
+    $processed = db_statement($sql, 'i', array(&$id));
+    return !$processed;
+}
+
+function date_delete($id){
+    $sql = "DELETE FROM dates WHERE id = ?";
+    $processed = db_statement($sql, 'i', array(&$id));
+    return !$processed;
 }
 
 

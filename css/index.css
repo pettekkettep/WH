@@ -413,6 +413,17 @@ li.imp-date {
     background: linear-gradient(left, rgba(170, 170, 0, 0.2), rgba(0, 0, 0, 0.1)); /* Standard syntax */
 }
 
+li.date a:link, li.date a:visited{
+    color: white;
+    text-decoration: none;
+}
+
+li.date a:hover{
+    color: lightslategrey;
+    text-decoration: none;
+}
+
+
 .house-info {
     font-family: Lemonmilk;
     font-size: 150%;
@@ -491,4 +502,39 @@ p.narrow{
     text-decoration: underline;
 }
 
+.generic-table{
+    border-collapse: collapse;
+    border: 2px solid white;
+    padding: 10px;
+    width: 90%;
+    margin: auto;
+}
 
+.generic-table tr{
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid white;
+}
+
+.generic-table td{
+    padding: 5px;
+}
+
+.generic-table a:link, .generic-table a:visited{
+    color: darkcyan;
+    text-decoration: none;
+}
+
+.generic-table a:hover{
+    color: white;
+    text-decoration: underline;
+}
+
+td.td-center {
+    text-align: center;
+}
+
+span.emphasize{
+    color: red;
+    font-weight: bold;
+}

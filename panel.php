@@ -1,5 +1,7 @@
 <?php
 
+if(isset($_SESSION['msg'])) echo $_SESSION['msg'];
+
 require_once('./functions_x.php');
 
 session_start();
@@ -25,6 +27,7 @@ if(!users_is_admin($_SESSION['username'], $_SESSION['password'])){
     <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
-    NIC TU JESZCZE NIE MA
+    <?php echo $_SESSION['msg'] ?>
+    Tu w przyszłości będzie panel administracji
 </body>
 </html>
