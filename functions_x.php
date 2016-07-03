@@ -73,7 +73,7 @@ function db_statement(){
         }
         mysqli_stmt_close($stmt);
         mysqli_close($dbConnection);
-        return NULL;
+        return true;
     }
 }
 
@@ -88,7 +88,7 @@ function print_last_news($amount_to_show = 5){
 //        }
 //        echo "</ul>";
     echo "<h4>Ostatnie newsy</h4>";
-    echo "<ul>";
+    echo "<ul class='no-indent'>";
     foreach ($result as $row) {
         echo "<li class='latest'><a href='/news.php?id=" . $row['id'] . "'>" . $row['title'] . "</a> | autor: " . $row['author'] . " | <i>" . time_description($row['date']) ."</i></li>";
     }
@@ -287,17 +287,75 @@ function paginate($sql, $href, $rows_per_page = 10, $page = 1, $array_of_arg = a
     return $sql . " LIMIT " . $start_limit . "," . $rows_per_page;
 }
 
+function print_news_buttons($id, $textcd){
+    $extra = "'" . "rest$id" . "'";
+    $comment = "'" . "comment$id" . "'";
+    $comments = "'" . "comments$id" . "'";
+    if($textcd != "" && $textcd != "&nbsp;") echo '<input type="button" class="news-btn" onclick="return toggleMe(' . $extra . ');" value="Pokaż resztę"</input>';
+    echo '<input type="button" class="news-btn" onclick="return toggleMe(' . $comment . ');" value="Dodaj komentarz"</input>';
+    if(how_many_comments($id) != 0) echo '<input type="button" class="news-btn" onclick="return toggleMe(' . $comments . ');" value="Pokaż komentarze (' . how_many_comments($id). ')"></input>';
+}
+
+function print_news_extra($id, $extra){
+    echo "<div class='extra' id='rest$id'>" . $extra;
+    echo "</div>";
+}
+
+function print_comment_box($id){
+    echo "<div class='comment-box' id='comment$id'>";
+    echo "<div class='basic-form form-sleek'><form action='/index_x.php' method='post'>";
+    echo "Podpis <input type='text' name='user' required></input>";
+    echo "Treść <input type='text' name='comment' maxlength='200' required></input>";
+    echo "<input type='hidden' name='newsid' value='$id'>";
+    echo "<p class='robotic' id='pot'><label>Jeśli widzisz to pole, to zostaw je puste</label>";
+    echo "<input name='robotest' type='text' id='robotest' class='robotest'>";
+    echo "</p>";
+    echo "<input class='narrow' type='submit' value='Wyślij komentarz!'></input>";
+    echo "</form></div></div>";
+}
+
+function print_comments_of_news($id){
+    $sql = "SELECT date, name, text FROM comments WHERE wid = $id";
+    $result = db_statement($sql);
+    echo "<div class='box-of-comments' id='comments" ."$id" ."'>";
+    echo "<table class='generic-table-no-borders'>";
+    while($row = mysqli_fetch_assoc($result)){
+        echo "<tr><td class='top left'>".$row['name']."</td><td class='top'>".$row['text']."</td><td class='top right'>".time_description($row['date'])."</td></tr>";
+    }
+    echo "</table></div>";
+}
+
+function add_comment_to_news($user, $comment, $newsid){
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $sql = "INSERT INTO comments (name, text, wid, ip) VALUES(?,?,?,?)";
+    $processed = db_statement($sql, 'ssis', array(&$user, &$comment, &$newsid, &$ip));
+}
+
+function how_many_comments($id){
+    $sql = "SELECT COUNT(*) as ile FROM comments WHERE wid = $id";
+    $result = db_statement($sql);
+    $row = mysqli_fetch_assoc($result);
+    return $row['ile'];
+}
+
 function print_feed($page){
-    $sql = "SELECT id, date, title, text, comments, icon, author FROM `news` WHERE stat = 1 ORDER BY date DESC";
+    $sql = "SELECT id, date, title, text, textcd, comments, icon, author FROM `news` WHERE stat = 1 ORDER BY date DESC";
     $sql_pag = paginate($sql, 'index_x.php', 10, $page);
     $result = db_statement($sql_pag);
 
     while ($row = mysqli_fetch_assoc($result)){
+        $no_of_comments = how_many_comments($row['id']);
         echo "<div class='row row-news'>";
-        echo "<h2> Ogłoszenie nr ". $row['id'] . " podpisano ". $row['author'] ."</h2>";
-        echo "<h3> Wydano: ". $row['date'] .", liczba komentarzy: ". $row['comments']. "</h3>";
+        echo "<p class='news-title'>&#240;''ä'KOMUNIKAT'NR'". $row['id'] . "'ä''ñ</p>";
+        echo "<p class='news-details'>Autor: ". $row['author'] ."</p>";
+        echo "<p class='news-details'>Dodano: ". $row['date'] ."</p>";
+        echo "<p class='news-details'>Liczba komentarzy: ". $no_of_comments . "</p>";
         echo "<img class='news-avatar' src='". $row['icon'] ."'><br><br>";
         echo $row['text'];
+        print_news_extra($row['id'], $row['textcd']);
+        print_news_buttons($row['id'], $row['textcd']);
+        print_comments_of_news($row['id']);
+        print_comment_box($row['id']);
         echo "</div>";
     }
 
@@ -317,9 +375,9 @@ function print_left_first(){
     echo "<div align='center'>
             <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/menu.png'>
             </div>
-            <ul>
+            <ul class='no-indent'>
                 <li class='menu'>
-                    <a href='http://wh.boo.pl/admin.php'>
+                    <a href='/panel_enter.php'>
                         Administracja
                     </a>
                 </li>
@@ -398,7 +456,7 @@ function print_enroll_menu(){
     echo "<div align='center'>
             <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/zapisy.png'>
             </div>
-            <ul>
+            <ul class='no-indent'>
                 <li class='menu menu-imp'>
                     <a href='http://wh.boo.pl/zapisy.php?akcja=uczen'>
                         Zapisy na ucznia
@@ -421,7 +479,7 @@ function print_enroll_menu(){
             <tr><td><p class='rav'>Ravenclaw</p></td><td class='rav house-att'>$r</td></tr>
             <tr><td><p class='slyth'>Slytherin</p></td><td class='slyth house-att'>$s</td></tr>
             </table>
-            <ul>
+            <ul class='no-indent'>
                 <li class='menu'>
                     <a href='http://wh.boo.pl/infopage.php?id=15'>
                         Skład dyrekcji
@@ -546,7 +604,7 @@ function print_time_table(){
     echo "<div align='center'>
             <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/planlekcji.png'>
             </div>
-            <ul>
+            <ul class='no-indent'>
                 <li class='menu'>
                     <a href='http://wh.boo.pl/plan.php'>
                         Plan dla klasy I
@@ -578,7 +636,7 @@ function print_important_dates(){
     echo "<div align='center'>
             <img src='http://www.wh.boo.pl/hogwartsfounders/waznedaty.png'>
             </div>
-            <ul>";
+            <ul class='no-indent'>";
 
     while ($row = mysqli_fetch_assoc($result)) {
         echo "<li class='";
@@ -606,7 +664,7 @@ function print_castle(){
     echo "<div align='center'>
              <img src='http://www.wh.boo.pl/hogwartsfounders/bloki/zamek.png'>
          </div>
-         <ul>
+         <ul class='no-indent'>
                 <li class='menu'>
                     <a href='http://wh.boo.pl/infopage.php?id=1'>
                         Regulamin szkoły
@@ -740,7 +798,7 @@ function print_kleks(){
              <p class='narrow'>Sowa: redakcja.kleks@gmail.com</p>
              <p class='narrow'>Nabór: OTWARTY</p>
          
-         <ul>
+         <ul class='no-indent'>
                 <li class='menu menu-imp'>
                     <a href='http://www.wh.boo.pl/kleks/kleks115.pdf'>
                         Najnowszy numer

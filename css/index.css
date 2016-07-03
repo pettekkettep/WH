@@ -47,6 +47,13 @@
     src: url('../fonts/LCD-N___.TTF');
 }
 
+@font-face {
+    font-family: york;
+    font-weight: normal;
+    font-style: none;
+    src: url('../fonts/yorkwhiteletter.otf');
+}
+
 html {
     background: url("../theme/HogwartsFounders/gfx/tlo.png") no-repeat center center fixed #000;
     -webkit-background-size: cover;
@@ -109,7 +116,21 @@ div > img {
     border: 1px solid gray;
 }
 
+p.news-title{
+    color: lightcyan;
+    text-align: center;
+    font-family: york, Ubuntu, arial, sans-serif;
+    margin: 5px 5px 0 5px;
+    padding: 5px 5px 0 5px;
+    font-size: 350%;
+    font-size: 7vw;
+}
+
+
 @media only screen and (min-width: 500px) {
+    p.news-title{
+        font-size: 4vw;
+    }
     .logo {width: 75%;}
     .col-m-1{ width: 8.33%; }
     .col-m-2{ width: 16.66%; }
@@ -127,6 +148,9 @@ div > img {
 
 
 @media only screen and (min-width: 900px) {
+    p.news-title{
+        font-size: 3vw;
+    }
     .logo {width: 50%;}
     .col-1{ width: 8.33%; }
     .col-2{ width: 16.66%; }
@@ -146,7 +170,7 @@ div > img {
     }
 }
 
-ul {
+ul.no-indent {
     padding-left: 0;
 }
 
@@ -345,12 +369,13 @@ li.news{
 }
 
 .row-news{
-    background-color: rgba(21, 12, 15, 0.2);
+    background-color: rgba(21, 12, 15, 0.25);
     border-collapse: collapse;
-    border-bottom: 2px solid white;
+    border-top: 1px solid white;
+    border-bottom: 5px solid white;
     margin-top: 20px;
-    margin-bottom: 20px;
-    border-radius: 10px;
+    margin-bottom: 40px;
+    border-radius: 15px;
     padding: 8px;
     text-align: justify;
 }
@@ -423,6 +448,14 @@ li.date a:hover{
     text-decoration: none;
 }
 
+p.news-details{
+    font-size: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+    display: inline-block;
+    width: 33%;
+    padding-bottom: 15px;
+}
 
 .house-info {
     font-family: Lemonmilk;
@@ -431,7 +464,7 @@ li.date a:hover{
     text-align: center;
 }
 
-p.narrow{
+.narrow{
     padding: 1px;
     margin: 1px;
 }
@@ -466,6 +499,21 @@ p.narrow{
     color: white;
     border-radius: 10px;
     padding: 15px;
+    border: 1px solid ghostwhite;
+}
+
+#msg {
+    position: fixed;
+    top: 10px;
+    left: 8px;
+    z-index: 999;
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: black;
+    font-size: 125%;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px;
     border: 1px solid ghostwhite;
 }
 
@@ -530,6 +578,34 @@ p.narrow{
     text-decoration: underline;
 }
 
+.generic-table-no-borders{
+    padding: 10px;
+    width: 90%;
+    margin: auto;
+    border-collapse: collapse;
+}
+
+.generic-table-no-borders tr{
+    border-collapse: collapse;
+    border-bottom: 1px solid darkgrey;
+}
+
+.generic-table-no-borders td{
+    padding: 10px 0;
+}
+
+td.top {
+    vertical-align: top;
+}
+
+td.left {
+    text-align: left;
+}
+
+td.right {
+    text-align: right;
+}
+
 td.td-center {
     text-align: center;
 }
@@ -538,3 +614,49 @@ span.emphasize{
     color: red;
     font-weight: bold;
 }
+
+.extra{
+    max-width: 100%;
+    width: 100%;
+    display: none;
+}
+
+.box-of-comments{
+    max-width: 100%;
+    width: 100%;
+    display: none;
+}
+
+.comment-box{
+    margin-top: 10px;
+    max-width: 100%;
+    width: 100%;
+    display: none;
+}
+
+input.news-btn{
+    display: block;
+    padding: 3px;
+    color: #FFF;
+    background: rgba(21, 12, 15, 0.1);
+    font-size: 100%;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid grey;
+    border-radius: 5px;
+    margin: 5px 0 5px 0;
+    font-family: Ubuntu, arial, sans-serif;
+    cursor: pointer;
+    cursor: hand;
+}
+
+input.news-btn:hover{
+    padding: 2px;
+    background: #109177;
+    border: 2px solid grey;
+    border-radius: 5px;
+    background: rgba(21, 12, 115, 0.1);
+}
+
+.robotic { display: none; }

@@ -1,6 +1,9 @@
 <?php
 
-if(isset($_SESSION['msg'])) echo $_SESSION['msg'];
+if(isset($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
 
 require_once('./functions_x.php');
 
