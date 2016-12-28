@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="b7808215-5c52-44d1-8e8b-7afb70458e8b" name="wh.boo.pl" url="http://wh.boo.pl">
+        <fileTransfer host="wh.boo.pl" port="21" rootFolder="/web" username="seanblack">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="21" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="wh.boo.pl">
+    <serverData>
+      <paths name="wh.boo.pl">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/wh.boo.pl/public_html" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
