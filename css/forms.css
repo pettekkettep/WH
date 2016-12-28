@@ -1,5 +1,21 @@
+::-webkit-input-placeholder {
+    color: #111;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    color: #111;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+    color: #111;
+}
+
+:-ms-input-placeholder {
+    color: #111;
+}
+
 .form-sleek{
-    max-width: 500px;
+    max-width: 100%;
     padding: 10px 20px;
     margin: 10px auto;
     padding: 20px;
@@ -9,15 +25,18 @@
 
 .form-sleek input[type="text"],
 .form-sleek input[type="password"],
+.form-sleek input[type="number"],
 .form-sleek select,
+.form-sleek textarea,
 .form-sleek input[type="date"],
+.form-sleek input[type="email"],
 .form-sleek input[type="time"]
- {
+{
     font-family: Ubuntu, arial, sans-serif;
     background: rgba(255,255,255,.1);
     border: none;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 12px;
     margin: 5px 0;
     outline: 0;
     padding: 4px;
@@ -25,8 +44,8 @@
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
-    background-color: #e8eeef;
-    color:#8a97a0;
+    background-color: #f9d0b9;
+    color: #111;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
     box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
 }
@@ -40,10 +59,12 @@
 .form-sleek input[type="password"]:focus,
 .form-sleek input[type="date"]:focus,
 .form-sleek input[type="time"]:focus,
+.form-sleek textarea:focus,
 .form-sleek select:focus
 {
-    background: #dfd9ee;
+    background: #ffddb9;
 }
+
 
 .form-sleek input[type="submit"],
 .form-sleek input[type="button"]
@@ -53,12 +74,12 @@
     padding: 5px;
     color: #FFF;
     margin: 15px 0 0 0;
-    background: #1abc9c;
-    font-size: 18px;
+    background: #7b091e;
+    font-size: 14px;
     text-align: center;
     font-style: normal;
     width: 100%;
-    border: 1px solid #16a085;
+    border: 1px solid #ffffff;
     border-width: 1px 1px 3px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -66,7 +87,8 @@
 .form-sleek input[type="submit"]:hover,
 .form-sleek input[type="button"]:hover
 {
-    background: #109177;
+    background: #ffffff;
+    color: #000;
 }
 
 .error{
@@ -78,4 +100,184 @@
     text-align: center;
     padding: 30px 0;
     margin-bottom: 20px;
+}
+
+.form-fancy{
+    max-width: 100%;
+    margin: 10px auto;
+    border-radius: 8px;
+    font-family: Ubuntu, arial, sans-serif;
+}
+
+.form-fancy input[type="text"],
+.form-fancy input[type="password"],
+.form-fancy select,
+.form-fancy input[type="date"],
+.form-fancy input[type="email"],
+.form-fancy textarea,
+.form-fancy input[type="time"]
+{
+    margin-top: 3px;
+    margin-bottom: 3px;
+    font-family: Ubuntu, arial, sans-serif;
+    background: rgba(255,255,255,.6);
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    outline: 0;
+    padding: 4px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: #f9d0b9;
+    color: #111;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
+}
+
+.form-fancy textarea {
+    height: 120px;
+    resize: none;
+}
+
+.form-fancy select{
+    -webkit-appearance: menulist-button;
+    font-size: 10px;
+}
+
+.form-fancy input[type="text"]:focus,
+.form-fancy input[type="password"]:focus,
+.form-fancy input[type="date"]:focus,
+.form-fancy input[type="time"]:focus,
+.form-fancy input[type="email"]:focus,
+.form-fancy textarea:focus,
+.form-fancy select:focus
+{
+    background: #eeeeee;
+}
+
+.form-fancy input[type="submit"],
+.form-fancy input[type="button"]
+{
+    position: relative;
+    display: block;
+    padding: 5px;
+    color: #FFF;
+    margin: 15px 0 0 0;
+    background: #7b091e;
+    font-size: 14px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 2px solid #FFF;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    cursor: hand;
+}
+.form-fancy input[type="submit"]:hover,
+.form-fancy input[type="button"]:hover
+{
+    background: #fff;
+    color: #000;
+}
+
+/*styling radio buttons*/
+
+div.radio-btn {
+    clear: both;
+}
+
+label {
+    width: 50%;
+    padding: 0 7px;
+    border-radius: 3px;
+}
+
+/* hide input */
+input.radio:empty {
+    margin-left: -999px;
+}
+
+/* style label */
+input.radio:empty ~ label {
+    position: relative;
+    float: left;
+    line-height: 1.5em;
+    text-indent: 2em;
+    margin-top: 0.5em;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input.radio:empty ~ label:before {
+    position: absolute;
+    display: block;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
+    width: 1.5em;
+    background: #f9d0b9;
+    border-radius: 3px 0 0 3px;
+}
+
+/* toggle hover */
+input.radio:hover:not(:checked) ~ label:before {
+    content:'\2714';
+    text-indent: .3em;
+    color: #C2C2C2;
+}
+
+
+/* toggle on */
+input.radio:checked ~ label:before {
+    content:'\2714';
+    text-indent: .3em;
+    font-weight: bold;
+    background-color: #004;
+}
+
+input.radio:checked ~ label {
+    font-weight: bold;
+}
+
+/* radio focus */
+input.radio:focus ~ label:before {
+    box-shadow: 0 0 0 3px #999;
+}
+
+.ckeditor{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.form-fasolki input[type="submit"]{
+    font-family: Ubuntu, arial, sans-serif;
+    background-color: #250505;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px #764134 solid;
+    padding: 2px;
+    margin: 2px 1px;
+    border-radius: 3px;
+    color: #f9e0d9;
+    text-decoration: none;
+    display: inline-block;
+    cursor: hand;
+    font-size: 100%;
+}
+
+.form-fasolki input[type="submit"]:hover{
+    background-color: #f9e0d9;
+    color: #250505;
+}
+
+.form-fasolki{
+    margin: 4px;
 }

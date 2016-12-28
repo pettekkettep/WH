@@ -3,9 +3,9 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="b7808215-5c52-44d1-8e8b-7afb70458e8b" name="wh.boo.pl" url="http://wh.boo.pl">
-        <fileTransfer host="wh.boo.pl" port="21" rootFolder="/web" username="seanblack">
+        <fileTransfer host="wh.boo.pl" port="21" rootFolder="/httpdocs" password="dfc7dfcbdfd8dfdedfcfdfc6dfc6dfc9dfcbdfdedfc2dfdcdfc3dfc6dfc6dfcf" username="seanblack">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" />
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>

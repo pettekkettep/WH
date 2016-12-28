@@ -1,0 +1,23 @@
+echo "
+<div class='login-form form-sleek'>";
+    echo "
+    <form action='/panel_enter.php' method='post'>";
+        echo " <h1>Strefa nauczycieli.</h1>
+        <h1> Aby przejść dalej, wpisz hasło.</h1>
+        <hr>
+        ";
+        echo " <h3>'Z wielką mocą wiąże się wielka odpowiedzialność'</h3>";
+        echo "
+        <div class='error' style='$style'>";
+            echo " Zaszła jakaś pomyłeczka. Spróbuj ponownie!";
+            echo "
+        </div>
+        ";
+        echo " Login <input type='text' name='login' placeholder='Najlepiej swój'></input>";
+        echo " Hasło <input type='password' name='password' placeholder='Najlepiej poprawne'></input>";
+        echo " <input type='submit' value='Chcę wejść!'></input>";
+        echo "
+    </form>
+    ";
+    echo "
+</div>";
